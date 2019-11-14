@@ -13,35 +13,69 @@ def print_messages(option):
         print("   Error in input.\n")
     else:
         pass
+    
 
-# Handles the addition of mods in a roll
-def mod_handler():
-    pass
+# Handles the addition of modifications in a roll
+def mod_handler(user, mod):
+    if mod != 0:
+        if len(user.split(mod))<3:
+            L = user.split(mod)[0].split('d')
+            times = L[0]
+            side = L[1]
+            m = user.split(mod)[1]
+            try:
+                times = int(times)
+                side = int(side)
+                if mod != '+':
+                    m = 0-int(m)
+                else:
+                    m = int(m)
+                results = roll_record(side,times)
+                result_display(results, side, m, 2)
+            except ValueError:
+                print_messages(int(3))
+    else:
+        L = user.split('d')
+        times = L[0]
+        side = L[1]
+        m = 0
+        try:
+            times = int(times)
+            side = int(side)
+            results = roll_record(side,times)
+            if times == 1: 
+                opt = 1
+            else: 
+                opt = 2
+            result_display(results, side, m, opt)
+        except ValueError:
+            print_messages(int(2))
 
-# Random module stimulates individual die rolls based on range    
-def roll_die(side):
-    import random
-    return random.randint(1,side)
+        
 
-# Records the results of each roll in a list
+# Stimulates individual die rolls based sides    
+# Records the result of each roll in a list
 def roll_record(side, times):
+    import random as rd
     L = []
     i = 0
     while i < times:
-        L.append(roll_die(side))
+        L.append(rd.randint(1,side))
         i += 1
     return L
 
+
 # Prints the results of the rolls to the user
-def result_display(results, side, mod):
-    if mod == 0:
+def result_display(results, side, mod, option):
+    if mod == 1:
         total = sum(results)
-        print('         %d sided die, %d time(s)' %(side, len(results)))
-        print('         Your roll(s) are',results,'for a total of %d\n' %(total))
+        print('         %d sided die,' %(side))
+        print('         Your roll is',results)
     else:
         total = sum(results) + mod
         print('         %d sided die, %d time(s), mod %d.' %(side, len(results), mod))
         print('         Your roll(s) are',results,'with mod %d for a total of %d\n' %(mod,total))
+        
 
 # Handles user's inputs using string parsing to trigger events       
 def user_input():
@@ -57,69 +91,22 @@ def user_input():
         # user input has 'd' in it, indicating roll call
         elif 'd' in user:
             if user[0] == 'd':
-                L = user.split('d')
-                times = 1
-                side = L[1]
-                mod = 0
-                try:
-                    times = int(times)
-                    side = int(side)
-                    mod = int(mod)
-                    results = roll_record(side,times)
-                    result_display(results, side, mod)
-                except ValueError:
-                    print_messages(int(3))
-            # Check if roll has modifiers '+' or '-', if so proceed with following
+                if '+' in user:
+                    mod_handler('1' + user, '+')
+                elif '-' in user:
+                    mod_handler('1' + user, '-')
+                else:
+                    mod_handler('1' + user, 0)
             elif '+' in user or '-' in user:
                 if '+' in user:
-                    if len(user.split('+'))<3:
-                        L = user.split('+')[0].split('d')
-                        times = L[0]
-                        side = L[1]
-                        mod = user.split('+')[1]
-                        try:
-                            times = int(times)
-                            side = int(side)
-                            mod = int(mod)
-                            results = roll_record(side,times)
-                            result_display(results, side, mod)
-                        except ValueError:
-                            print_messages(int(3))
-                    else:
-                        print("   Error in input")
+                    mod_handler(user, '+')
                 elif '-' in user:
-                    if len(user.split('-'))<3:
-                        L = user.split('-')[0].split('d')
-                        times = L[0]
-                        side = L[1]
-                        mod = user.split('-')[1]
-                        try:
-                            times = int(times)
-                            side = int(side)
-                            mod = 0-int(mod)
-                            results = roll_record(side,times)
-                            result_display(results, side, mod)
-                        except ValueError:
-                            print_messages(int(3))
-                    else:
-                        print_messages(int(3))
-                else:
-                    print_messages(int(3))
-            # If roll does NOT have modifiers, proceed with the following instead    
+                    mod_handler(user, '-')    
             else:
-                L = user.split('d')
-                times = L[0]
-                side = L[1]
-                mod = 0
-                try:
-                    times = int(times)
-                    side = int(side)
-                    results = roll_record(side,times)
-                    result_display(results, side, mod)
-                except ValueError:
-                    print_messages(int(2))
+                mod_handler(user, 0)
         else:
             print_messages(int(2))
+            
 
 # The Program's start function            
 def program_IO():
