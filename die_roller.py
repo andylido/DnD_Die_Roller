@@ -15,7 +15,7 @@ def print_messages(option):
         pass
     
 
-# Handles the addition of modifications in a roll
+# Handles the addition of modifications to a roll
 def mod_handler(user, mod):
     if mod != 0:
         if len(user.split(mod))<3:
