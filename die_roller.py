@@ -67,17 +67,33 @@ def roll_record(side, times):
 
 # Prints the results of the rolls to the user
 def result_display(results, side, mod, option):
-    if mod == 1:
-        total = sum(results)
-        print('         %d sided die,' %(side))
-        print('         Your roll is',results)
+    from datetime import datetime as dt
+    print('   %s'%dt.now().strftime('%H:%M:%S'))
+    if option == 1:
+        print('         Roll a %d sided die' %(side))
+        print('         Got: %d\n'% (results[0]))
+    elif option == 2 and len(results)==1:
+        print('         Roll a %d sided die mod %d' %(side,mod))
+        print('             Got:', results[0])
+        print('             Mod:', mod)
+        print('         Total: %d\n' % (sum(results) + mod))
     else:
-        total = sum(results) + mod
-        print('         %d sided die, %d time(s), mod %d.' %(side, len(results), mod))
-        print('         Your roll(s) are',results,'with mod %d for a total of %d\n' %(mod,total))
+        if mod != 0:
+            print('         Roll a %d sided die, %d times, mod %d' %(side, len(results), mod))
+        else:
+            print('         Roll a %d sided die, %d times' %(side, len(results)))
+        print('             Got: ', end='')
+        for item in results:
+            print('%d ' %(item), end='')
+        print("")
+        if mod != 0:
+            print('             Mod:', mod)
+        else:
+            pass
+        print('         Total: %d\n' % (sum(results) + mod))
         
 
-# Handles user's inputs using string parsing to trigger events       
+# Handles user's inputs using string parsing to trigger events     
 def user_input():
     terminate = False
     # While Loop for infinite inputs until terminate condition
@@ -108,7 +124,7 @@ def user_input():
             print_messages(int(2))
             
 
-# The Program's start function            
+# Program's start function            
 def program_IO():
     version = "v1.0"
     print("\n   Die Roller (%s)" %(version))
