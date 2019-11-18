@@ -17,6 +17,7 @@ def print_messages(option):
 
 # Handles the addition of modifications to a roll
 def mod_handler(user, mod):
+    # Just a normal die roll with no modifiers
     if mod != 0:
         if len(user.split(mod))<3:
             L = user.split(mod)[0].split('d')
@@ -34,6 +35,7 @@ def mod_handler(user, mod):
                 result_display(results, side, m, 2)
             except ValueError:
                 print_messages(int(3))
+    # Rolls die with modifiers
     else:
         L = user.split('d')
         times = L[0]
