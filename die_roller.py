@@ -17,7 +17,7 @@ def print_messages(option):
 
 # Handles the addition of modifications to a roll
 def mod_handler(user, mod):
-    # Just a normal die roll with no modifiers
+    # Roll die with modifiers
     if mod != 0:
         if len(user.split(mod))<3:
             L = user.split(mod)[0].split('d')
@@ -35,7 +35,7 @@ def mod_handler(user, mod):
                 result_display(results, side, m, 2)
             except ValueError:
                 print_messages(int(3))
-    # Rolls die with modifiers
+    # Rolls die with no modifiers
     else:
         L = user.split('d')
         times = L[0]
@@ -55,8 +55,7 @@ def mod_handler(user, mod):
 
         
 
-# Stimulates individual die rolls based sides    
-# Records the result of each roll in a list
+# Stimulate individual die rolls and record in list
 def roll_record(side, times):
     import random as rd
     L = []
@@ -67,7 +66,7 @@ def roll_record(side, times):
     return L
 
 
-# Prints the results of the rolls to the user
+# Prints roll results
 def result_display(results, side, mod, option):
     from datetime import datetime as dt
     print('   %s'%dt.now().strftime('%H:%M:%S'))
