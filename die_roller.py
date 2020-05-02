@@ -94,6 +94,31 @@ def result_display(results, side, mod, option):
         print('         Total: %d\n' % (sum(results) + mod))
         
 
+def mutiple_rolls(user):
+    rolls = user.split(' ')
+    for item in rolls:
+        if item == '':
+            rolls.remove(item)
+    return rolls
+
+def individual_roll(user):
+    if user[0] == 'd':
+        if '+' in user:
+            mod_handler('1' + user, '+')
+        elif '-' in user:
+            mod_handler('1' + user, '-')
+        else:
+             mod_handler('1' + user, 0)
+    elif '+' in user or '-' in user:
+        if '+' in user and 'd' in user:
+            mod_handler(user, '+')
+        elif '-' in user and 'd' in user:
+            mod_handler(user, '-')
+        else:
+            print_messages(int(2))
+    else:
+        mod_handler(user, 0)
+
 # Handles user's inputs using string parsing to trigger events     
 def user_input():
     terminate = False
@@ -107,27 +132,21 @@ def user_input():
             print_messages(int(1))
         # user input has 'd' in it, indicating roll call
         elif 'd' in user:
-            if user[0] == 'd':
-                if '+' in user:
-                    mod_handler('1' + user, '+')
-                elif '-' in user:
-                    mod_handler('1' + user, '-')
-                else:
-                    mod_handler('1' + user, 0)
-            elif '+' in user or '-' in user:
-                if '+' in user:
-                    mod_handler(user, '+')
-                elif '-' in user:
-                    mod_handler(user, '-')    
+            if ' ' in user:
+                rolls = mutiple_rolls(user)
+                for die in rolls:
+                    individual_roll(die)
+                print("   -------------------------")
             else:
-                mod_handler(user, 0)
+                individual_roll(user)
+                print("   -------------------------")
         else:
             print_messages(int(2))
             
 
 # Program's start function            
 def program_IO():
-    version = "v1.0"
+    version = "v1.1"
     print("\n   Die Roller (%s)" %(version))
     print("   Directions: Enter 'q' to quit, 'h' for help. \n")
     user_input()
