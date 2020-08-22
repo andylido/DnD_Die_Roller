@@ -1,3 +1,5 @@
+import random as rd
+
 # Prints a message to the user
 def print_messages(option):
     if option == 1:
@@ -35,7 +37,7 @@ def mod_handler(user, mod):
                 result_display(results, side, m, 2)
             except ValueError:
                 print_messages(int(3))
-    # Rolls die with no modifiers
+    # Roll die with no modifiers
     else:
         L = user.split('d')
         times = L[0]
@@ -57,7 +59,6 @@ def mod_handler(user, mod):
 
 # Stimulate individual die rolls and record in list
 def roll_record(side, times):
-    import random as rd
     L = []
     i = 0
     while i < times:
@@ -119,7 +120,7 @@ def individual_roll(user):
     else:
         mod_handler(user, 0)
 
-# Handles user's inputs using string parsing to trigger events     
+# Handle user inputs using string parsing to trigger events     
 def user_input():
     terminate = False
     # While Loop for infinite inputs until terminate condition
@@ -130,6 +131,7 @@ def user_input():
             return
         elif user =='h':
             print_messages(int(1))
+            
         # user input has 'd' in it, indicating roll call
         elif 'd' in user:
             if ' ' in user:
@@ -140,6 +142,9 @@ def user_input():
             else:
                 individual_roll(user)
                 print("   -------------------------")
+        elif 'c' in user:
+            for i in range(50):
+                print("")
         else:
             print_messages(int(2))
             
