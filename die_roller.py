@@ -93,7 +93,34 @@ def result_display(results, side, mod, option):
         else:
             pass
         print('         Total: %d\n' % (sum(results) + mod))
-        
+
+
+#Pyromancer feat allowing max dmg dies to add more dmg dies and rerolls all rolls of 1 once
+def explosion(user):
+    L = user.split('d')
+    times = L[0]
+    side = L[1]
+    rolls = roll_record(side, times)
+    print("Original:", rolls)
+    for item in rolls:
+        if item == 1:
+            rolls.pop(item)
+            reroll = roll_record(side, 1) #write code for parsing dmg die side
+            rolls.append(reroll)
+            while reroll==6:
+                reroll = roll_record(side, 1) #write code for parsing dmg die side
+                if reroll ==1:
+                    reroll = roll_record(side, 1) #write code for parsing dmg die side
+                rolls.append(reroll)
+        elif item == 6:
+            reroll=6
+            while reroll==6:
+                reroll = roll_record(side, 1) #write code for parsing dmg die side
+                if reroll ==1:
+                    reroll = roll_record(side, 1) #write code for parsing dmg die side
+                rolls.append(reroll)
+    print("After Exploding:", rolls)
+    
 
 def mutiple_rolls(user):
     rolls = user.split(' ')
@@ -101,6 +128,7 @@ def mutiple_rolls(user):
         if item == '':
             rolls.remove(item)
     return rolls
+
 
 def individual_roll(user):
     if user[0] == 'd':
@@ -132,21 +160,23 @@ def user_input():
         elif user =='h':
             print_messages(int(1))
             
+        elif "ep" in user:
+            explosion(user[2:])
+            
         # user input has 'd' in it, indicating roll call
         elif 'd' in user:
             if ' ' in user:
                 rolls = mutiple_rolls(user)
                 for die in rolls:
                     individual_roll(die)
-                print("   -------------------------")
             else:
                 individual_roll(user)
-                print("   -------------------------")
         elif 'c' in user:
             for i in range(50):
                 print("")
         else:
             print_messages(int(2))
+            print("   -------------------------\n")
             
 
 # Program's start function            
